@@ -1,0 +1,11 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="refresh" content="0; url=./math_princess_battle_v2.html">
+<script>
+location.replace('./math_princess_battle_v2.html');
+</script>
+</head>
+<body></body>
+</html>
