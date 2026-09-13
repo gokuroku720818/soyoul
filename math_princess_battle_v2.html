@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>마법소녀 수학대전 v2</title>
+<style>
+:root{--navy:#102554;--blue:#4ba8f7;--ice:#dff8ff;--pink:#ff75b9;--gold:#ffd257;--glass:#ffffffd9}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,"Apple SD Gothic Neo",sans-serif;color:#102554;background:#bdeeff;min-height:100vh}button{font:inherit;cursor:pointer}
+.game{min-height:100vh;background:linear-gradient(#5ebff8 0 48%,#d9f6ff 49% 100%);position:relative;overflow:hidden}
+.sky{position:absolute;inset:0;background:radial-gradient(circle at 75% 15%,#fff 0 1%,transparent 16%),linear-gradient(155deg,transparent 58%,#ffffff55 59% 61%,transparent 62%);pointer-events:none}
+.top{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:#0d3476dd;color:white;box-shadow:0 3px 12px #001b4c55}
+.logo{font-weight:1000;font-size:clamp(18px,3vw,30px);text-shadow:0 2px #16306e}.stats{display:flex;gap:10px}.pill{background:#ffffff20;border:2px solid #ffffff55;border-radius:18px;padding:6px 12px;font-weight:900}
+.world{position:relative;z-index:1;max-width:1000px;margin:auto;height:410px;padding:18px}.castle{position:absolute;right:8%;top:35px;font-size:120px;opacity:.45;filter:drop-shadow(0 8px 5px #4678b8)}
+.princess{position:absolute;left:8%;bottom:28px;width:180px;text-align:center}.head{width:82px;height:82px;border-radius:50%;background:#ffe0ce;margin:auto;position:relative;border:3px solid #fff;box-shadow:0 4px 10px #2345}.hair{position:absolute;width:92px;height:55px;left:-8px;top:-13px;background:#f7f3df;border-radius:55% 55% 35% 35%;box-shadow:inset -8px -5px #dcd8c7}.face{position:absolute;inset:30px 15px 10px;font-size:22px}.dress{height:155px;margin:-5px auto 0;width:145px;clip-path:polygon(38% 0,62% 0,70% 25%,96% 100%,4% 100%,30% 25%);background:linear-gradient(135deg,#a7efff,#52bcec 55%,#d9fbff);border:4px solid #ffffffaa;filter:drop-shadow(0 6px 5px #1c4d7d55);position:relative}.dress:after{content:"❄ ✦ ❄";position:absolute;left:0;right:0;top:65px;color:#fff;font-size:18px}.wand{position:absolute;right:-25px;top:85px;font-size:55px;transform:rotate(-25deg)}
+.enemy{position:absolute;right:10%;bottom:45px;text-align:center}.enemySprite{font-size:105px;filter:drop-shadow(0 7px 4px #1235)}.hp{width:190px;height:18px;background:#243968;border:3px solid white;border-radius:20px;overflow:hidden}.hp i{display:block;height:100%;background:linear-gradient(90deg,#58df86,#b9f665);transition:.3s}.enemy .hp i{background:linear-gradient(90deg,#ff6a79,#ffbd56)}
+.enemyName{font-weight:1000;font-size:18px;color:white;text-shadow:0 2px 3px #123;margin-bottom:5px}.pet{position:absolute;left:26%;bottom:45px;font-size:55px;filter:drop-shadow(0 4px 3px #3456)}
+.combo{position:absolute;left:50%;top:25px;transform:translateX(-50%);font-size:30px;font-weight:1000;color:#ffdb45;text-shadow:0 3px #a84973}
+.fx{position:absolute;left:31%;top:45%;font-size:65px;opacity:0}.blast{animation:blast .65s ease-out}@keyframes blast{0%{opacity:1;transform:translate(0) scale(.5)}70%{opacity:1;transform:translate(330px,-20px) scale(1.4)}100%{opacity:0;transform:translate(390px) scale(2)}}.hit{animation:hit .35s}@keyframes hit{25%{transform:translateX(18px) rotate(8deg)}50%{transform:translateX(-18px) rotate(-8deg)}}.jump{animation:jump .4s}@keyframes jump{50%{transform:translateY(-25px) scale(1.08)}}
+.quiz{position:relative;z-index:3;max-width:760px;margin:-55px auto 18px;background:var(--glass);backdrop-filter:blur(10px);border:4px solid white;border-radius:26px;padding:15px;box-shadow:0 12px 35px #17396c44;text-align:center}.type{font-weight:900;color:#3286d2}.q{font-size:42px;font-weight:1000;margin:3px}.answers{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.ans{border:3px solid #b8d9f7;border-radius:17px;background:white;padding:13px;font-size:27px;font-weight:1000;color:#14356c;box-shadow:0 4px #9ebbd5}.ans.good{background:#9cf0c8}.ans.bad{background:#ffb2c3}.msg{height:26px;margin-top:9px;font-weight:900;color:#8450b9}
+.menu{position:fixed;left:10px;top:76px;z-index:5;display:flex;flex-direction:column;gap:7px}.menu button{border:2px solid #ffffff55;background:#123b78dd;color:white;border-radius:14px;padding:10px;font-weight:900}.menu button.active{background:#63bff7}
+.modal{position:fixed;inset:0;background:#08204dcc;z-index:20;display:flex;align-items:center;justify-content:center;padding:15px}.hidden{display:none}.shop{width:min(960px,100%);max-height:92vh;overflow:auto;background:linear-gradient(#dff6ff,#c7eaff);border:4px solid white;border-radius:28px;padding:18px;box-shadow:0 20px 60px #001b55aa}.shopHead{display:flex;justify-content:space-between;align-items:center}.shop h2{font-size:30px;margin:0}.close{border:0;background:#183b77;color:white;border-radius:50%;width:42px;height:42px;font-size:22px}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}.card{background:white;border:3px solid #b8ddfa;border-radius:20px;padding:10px;text-align:center}.card.equipped{border-color:#ffd45c;box-shadow:0 0 0 3px #fff2a5}.miniDress{height:130px;width:100px;margin:auto;clip-path:polygon(38% 0,62% 0,70% 25%,96% 100%,4% 100%,30% 25%);border:3px solid #fff;filter:drop-shadow(0 5px 4px #2344)}.card h3{margin:5px 0}.buy{width:100%;border:0;border-radius:13px;padding:9px;background:linear-gradient(#ff8bc5,#ed5ca6);color:white;font-weight:1000}.buy.owned{background:linear-gradient(#62bff6,#398bd7)}.price{font-weight:1000;color:#bd7c00;margin:4px}.startCard{max-width:480px;background:white;border-radius:28px;padding:28px;text-align:center;border:4px solid #c9eeff}.primary{width:100%;border:0;border-radius:16px;padding:14px;background:linear-gradient(135deg,#62bff6,#b768ed);color:white;font-size:20px;font-weight:1000}
+@media(max-width:700px){.menu{position:relative;left:auto;top:auto;flex-direction:row;padding:7px;background:#0d3476}.menu button{flex:1;padding:7px}.world{height:360px}.princess{left:2%;transform:scale(.8);transform-origin:bottom left}.enemy{right:3%;transform:scale(.82);transform-origin:bottom right}.pet{left:29%}.quiz{margin:-40px 8px 10px}.cards{grid-template-columns:repeat(2,1fr)}.q{font-size:36px}.castle{font-size:90px}}
+</style>
+</head>
+<body>
+<div class="game">
+<div class="sky"></div>
+<header class="top"><div class="logo">❄️ 마법소녀 수학대전</div><div class="stats"><div class="pill">Lv.<span id="lv">1</span></div><div class="pill">⭐ <span id="stars">0</span></div></div></header>
+<nav class="menu"><button class="active">⚔️ 전투</button><button id="shopBtn">👗 상점</button><button id="modeBtn">➕✖️ 혼합</button></nav>
+<section class="world">
+<div class="castle">🏰</div><div class="combo" id="combo"></div>
+<div class="princess"><div class="head"><div class="hair"></div><div class="face">👁️‿👁️</div></div><div class="dress" id="dress"></div><div class="wand">🪄</div></div>
+<div class="pet">🐱</div>
+<div class="enemy"><div class="enemyName" id="enemyName"></div><div class="hp"><i id="enemyHp"></i></div><div class="enemySprite" id="enemy"></div></div>
+<div class="fx" id="fx">❄️</div>
+</section>
+<section class="quiz"><div class="type" id="type"></div><div class="q" id="question"></div><div class="answers" id="answers"></div><div class="msg" id="msg">정답을 골라 마법을 발사하세요!</div></section>
+</div>
+
+<div class="modal" id="start"><div class="startCard"><h1>❄️ 마법소녀 수학대전</h1><p>덧셈과 곱셈으로 몬스터를 물리치고<br>⭐ 별 50개를 모아 예쁜 드레스를 사세요!</p><button class="primary" id="play">모험 시작!</button></div></div>
+<div class="modal hidden" id="shopModal"><div class="shop"><div class="shopHead"><div><h2>👗 드레스 상점</h2><b>보유 별 ⭐ <span id="shopStars">0</span></b></div><button class="close" id="closeShop">✕</button></div><p>드레스는 모두 ⭐50개! 구매하면 바로 자동으로 입어요.</p><div class="cards" id="cards"></div></div></div>
+<div class="modal hidden" id="win"><div class="startCard"><h1>🎁 승리!</h1><p id="winText"></p><button class="primary" id="next">다음 몬스터!</button></div></div>
+
+<script>
+(()=>{
+const $=x=>document.getElementById(x);
+const dresses=[
+{id:'ice',name:'하늘빛 드레스',free:true,bg:'linear-gradient(135deg,#d9fbff,#4eb9ec 55%,#b7efff)'},
+{id:'cherry',name:'벚꽃 드레스',bg:'linear-gradient(135deg,#ffe1ef,#ff83bb 55%,#ffd2e8)'},
+{id:'star',name:'별빛 드레스',bg:'linear-gradient(135deg,#eadcff,#8b65e8 55%,#c7a8ff)'},
+{id:'gold',name:'황금 드레스',bg:'linear-gradient(135deg,#fff3b5,#e8ad35 55%,#ffe49a)'},
+{id:'aurora',name:'오로라 드레스',bg:'linear-gradient(135deg,#ffbce7,#86e5e5 50%,#9e8cff)'},
+{id:'queen',name:'얼음여왕 드레스',bg:'linear-gradient(135deg,#fff,#9bdcff 50%,#d9c7ff)'}
+];
+const mons=[['얼음 슬라임','🧊',70],['눈꽃 토끼','🐰',90],['숲의 유령','👻',110],['마법 골렘','🗿',140],['설산 괴수','👹',170],['드래곤 대왕','🐲',220]];
+let s=JSON.parse(localStorage.getItem('mathPrincessV2')||'null')||{stars:0,lv:1,xp:0,stage:1,combo:0,mode:'mix',owned:['ice'],equipped:'ice'};
+let answer=0,enemyHp=70,enemyMax=70,locked=false,currentFx='❄️';
+function save(){localStorage.setItem('mathPrincessV2',JSON.stringify(s))}
+function rnd(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function md(){return mons[(s.stage-1)%mons.length]}
+function setup(){let m=md();enemyMax=m[2]+Math.floor((s.stage-1)/6)*25;enemyHp=enemyMax;$('enemyName').textContent=m[0];$('enemy').textContent=m[1];update();question()}
+function question(){
+ locked=false;let mul=s.mode==='mul'||(s.mode==='mix'&&Math.random()<.45);let a,b;
+ if(mul){let cap=Math.min(2+Math.floor(s.stage/2),9);a=rnd(2,Math.max(2,cap));b=rnd(1,9);answer=a*b;$('question').textContent=`${a} × ${b} = ?`;$('type').textContent='⚡ 곱셈 마법';currentFx='⚡'}
+ else{let cap=Math.min(10+s.stage*3,50);a=rnd(1,cap);b=rnd(1,cap);answer=a+b;$('question').textContent=`${a} + ${b} = ?`;$('type').textContent='❄️ 덧셈 마법';currentFx='❄️'}
+ let set=new Set([answer]);while(set.size<3){let d=rnd(-5,5);if(d&&answer+d>0)set.add(answer+d)}
+ $('answers').innerHTML='';[...set].sort(()=>Math.random()-.5).forEach(v=>{let b=document.createElement('button');b.className='ans';b.textContent=v;b.onclick=()=>choose(v,b);$('answers').appendChild(b)})
+}
+function choose(v,b){
+ if(locked)return;
+ if(v!==answer){b.classList.add('bad');s.combo=0;$('msg').textContent='조금 아쉬워요! 다시 골라보세요 💗';update();return}
+ locked=true;b.classList.add('good');s.combo++;let dmg=28+Math.min(5,s.combo)*4;if(s.combo>=5)dmg+=22;
+ s.stars+=s.combo>=5?3:1;s.xp+=10;if(s.xp>=100){s.xp-=100;s.lv++}
+ $('msg').textContent=s.combo>=5?'🌈 별빛 필살기! 정답이에요!':'✨ 정답! 마법 발사!';
+ $('fx').textContent=s.combo>=5?'🌟':currentFx;$('fx').classList.remove('blast');void $('fx').offsetWidth;$('fx').classList.add('blast');
+ setTimeout(()=>{$('enemy').classList.add('hit');enemyHp=Math.max(0,enemyHp-dmg);update()},420);
+ setTimeout(()=>{$('enemy').classList.remove('hit');enemyHp<=0?victory():question()},780);save();update()
+}
+function victory(){s.stars+=10;s.stage++;save();$('winText').innerHTML=`몬스터를 물리쳤어요!<br><b>보너스 ⭐10개</b><br>현재 별 ⭐ ${s.stars}`;$('win').classList.remove('hidden');update()}
+function update(){
+ $('lv').textContent=s.lv;$('stars').textContent=s.stars;$('shopStars').textContent=s.stars;$('enemyHp').style.width=(enemyHp/enemyMax*100)+'%';$('combo').textContent=s.combo>=2?`${s.combo} COMBO!`:'';
+ let d=dresses.find(x=>x.id===s.equipped)||dresses[0];$('dress').style.background=d.bg;
+ $('modeBtn').textContent=s.mode==='mix'?'➕✖️ 혼합':s.mode==='add'?'➕ 덧셈':'✖️ 곱셈'
+}
+function renderShop(){
+ $('cards').innerHTML='';dresses.forEach(d=>{let owned=s.owned.includes(d.id),eq=s.equipped===d.id;let c=document.createElement('div');c.className='card'+(eq?' equipped':'');
+ c.innerHTML=`<div class="miniDress" style="background:${d.bg}"></div><h3>${d.name}</h3><div class="price">${d.free?'기본 의상':'⭐ 50'}</div><button class="buy ${owned?'owned':''}">${eq?'장착 중!':owned?'입기':'구매하기'}</button>`;
+ c.querySelector('button').onclick=()=>buy(d);$('cards').appendChild(c)})
+}
+function buy(d){
+ if(s.owned.includes(d.id)){s.equipped=d.id;$('msg').textContent=`👗 ${d.name}으로 갈아입었어요!`}
+ else{if(s.stars<50){alert('별이 부족해요! ⭐50개를 모아보세요.');return}s.stars-=50;s.owned.push(d.id);s.equipped=d.id;$('msg').textContent=`🎉 ${d.name} 구매! 바로 입었어요!`}
+ save();update();renderShop()
+}
+$('shopBtn').onclick=()=>{renderShop();$('shopModal').classList.remove('hidden')};$('closeShop').onclick=()=>$('shopModal').classList.add('hidden');
+$('modeBtn').onclick=()=>{s.mode=s.mode==='mix'?'add':s.mode==='add'?'mul':'mix';save();update();question()};
+$('play').onclick=()=>{$('start').classList.add('hidden');setup()};$('next').onclick=()=>{$('win').classList.add('hidden');setup()};
+update();
+})();
+</script>
+</body>
+</html>
